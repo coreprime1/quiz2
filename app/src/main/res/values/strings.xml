@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TOPQuiz2</string>
+    <string name="quiz_title">Questions ?</string>
+    <string name="reponse1">Questions ?</string>
+    <string name="reponse2">Questions ?</string>
+    <string name="reponse3">Questions ?</string>
+</resources>

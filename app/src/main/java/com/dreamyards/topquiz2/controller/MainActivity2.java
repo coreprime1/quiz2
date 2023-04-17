@@ -3,23 +3,33 @@ package com.dreamyards.topquiz2.controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamyards.topquiz2.R;
 import com.dreamyards.topquiz2.model.Question;
+import com.dreamyards.topquiz2.model.User;
 
 import java.util.Arrays;
 
 public class MainActivity2 extends AppCompatActivity implements View.OnClickListener {
+
+    public static final String SHARED_PREFERENCE_GAME_USER = "GAME_USER";
+    public static final String SHARED_PREFERENCE_GAME_USER_NAME = "GAME_USER_NAME";
+    public static final String SHARED_PREFERENCE_GAME_USER_SCORE = "GAME_USER_SCORE";
     private TextView txtQuestion;
     private Button btnReponse1;
     private Button btnReponse2;
     private Button btnReponse3;
+    private SharedPreferences mSharedPreferences;
 
     private Question mQuestion;
+
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +38,17 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
 
         Intent intent = getIntent();
         String username = intent.getStringExtra("USERNAME");
+
+        mUser = new User();
+        mUser.setsName(username);
+
+        mSharedPreferences = getSharedPreferences(  SHARED_PREFERENCE_GAME_USER
+                , MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(SHARED_PREFERENCE_GAME_USER_NAME, mUser.getsName());
+        editor.putInt(SHARED_PREFERENCE_GAME_USER_SCORE, mUser.getScore());
+        editor.apply();
+
 
         mQuestion = new Question("Qui est le créateur d'Android ?",
                 Arrays.asList(
@@ -56,6 +77,21 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-
+        int reponse = 0;
+        if (v.getId() == R.id.game_activity_button_1){
+            reponse = 0;
+        } else if (v.getId() == R.id.game_activity_button_2) {
+            reponse = 1;
+        } else {
+            reponse = 2;
+        }
+        String message;
+        if (reponse == mQuestion.getBonneReponse()){
+            mUser.incrementScore();
+            message = "Félicitation"+mUser.getsName()+" vous avez la bonne question";
+        } else{
+            message = "Malheureusement"+mUser.getsName()+" vous n'avez pas la bonne question";
+        }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

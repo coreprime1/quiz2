@@ -15,6 +15,7 @@
         android:padding="8dp"
         android:text="Welcome! What's your name?"/>
 
+
     <EditText
         android:id="@+id/main_edt_name"
         android:layout_width="match_parent"
